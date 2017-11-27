@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>打地鼠</title>
+    <style rel="stylesheet" type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            position: relative;
+            width: 500px;
+            margin: 10px auto;
+        }
+
+        body:after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        #box {
+            width: 350px;
+            height: 350px;
+            border: 2px solid red;
+            padding: 10px;
+            margin: 10px auto;
+            box-sizing: border-box;
+            border-radius: 20px;
+        }
+
+        #box div {
+            list-style-type: none;
+            margin: 2px;
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            border: 1px solid blue;
+            border-radius: 50%;
+            box-sizing: border-box;
+        }
+
+        div img {
+            border-radius: 50%;
+            margin: 5px;
+            width: 90px;
+        }
+
+        img:hover {
+            cursor: pointer;
+        }
+
+        #start {
+            position: absolute;
+            display: block;
+            left: 170px;
+            bottom: -70px;
+        }
+
+        p {
+            position: absolute;
+            left: 170px;
+            bottom: -50px;
+        }
+
+        #restart {
+            position: absolute;
+            left: 210px;
+            bottom: -125px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="box">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+<img id="start" src="start.png" onclick="begin()"/>
+<p style="display: none">您的得分为<span>0</span></p>
+<img id="restart" src="restart.png" onclick="begin()"/>
+<script type="text/javascript">
+    var box = document.getElementById("box");
+    var mouse = box.children;
+    var detail = document.getElementsByTagName("p")[0].firstElementChild;
+    var startbutton = document.getElementById("start");
+    var scoreblock = startbutton.nextElementSibling;
+    var restart = document.getElementById("restart");
+    restart.style.display = "none";
+    var score;
+    var random;
+    var interval;
+    var timeInterval;
+    var time;
+    for (var i = 0; i < mouse.length; i++) {
+        var img = document.createElement("img");
+        mouse[i].appendChild(img);
+        mouse[i].children[0].setAttribute("src", "mole.png");
+        mouse[i].children[0].style.display = "";
+    }
+
+    function start() {
+        random = Math.floor(Math.random() * 9);
+        for (var i = 0; i < mouse.length; i++) {
+            if (i === random) {
+                mouse[i].children[0].style.display = "";
+                mouse[i].firstElementChild.setAttribute("onClick", "isClicked()");
+            } else {
+                mouse[i].children[0].style.display = "none"
+            }
+        }
+    }
+
+    function isClicked() {
+        mouse[random].firstElementChild.removeAttribute("onClick");
+        mouse[random].firstElementChild.style.display = "none";
+        score++;
+        detail.innerHTML = score;
+    }
+
+    function begin() {
+        time = 10;
+        score = 0;
+        detail.innerHTML = score;
+        restart.style.display = "none";
+        startbutton.style.display = "none";
+        scoreblock.style.display = "";
+        interval = setInterval(start, 600);
+        timeInterval = setInterval(timeup, 1000);
+    }
+
+    function timeup() {
+        time--;
+        if (time <= 0) {
+            clearInterval(interval);
+            clearInterval(timeInterval);
+            for (var i = 0; i < mouse.length; i++) {
+                mouse[i].firstElementChild.style.display = "";
+                mouse[i].firstElementChild.removeAttribute("onClick");
+            }
+            restart.style.display = "";
+        }
+    }
+
+</script>
+</body>
+</html>
